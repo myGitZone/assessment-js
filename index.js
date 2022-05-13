@@ -64,12 +64,13 @@ exports.setDefaults = (defaultVal) => {
 exports.fetchUserByNameAndUsersCompany = (name, services) => {
     async function getResult() {
         try {
-            const status = await services.fetchStatus();
+            const statusPromise = services.fetchStatus();
             const users = await services.fetchUsers();
             const user = users.find((item) => {
                 return item.name === name;
             });
-            const company = await services.fetchCompanyById(user.companyId);
+            const companyPromise = services.fetchCompanyById(user.companyId);
+            const [status, company] = await Promise.all([statusPromise, companyPromise]);
             return {
                 company,
                 status,
