@@ -38,11 +38,12 @@ exports.applyStatusColor = (obj, values) => {
             map[val] = key;
         })
     });
-    return Array.isArray(values) && values.filter(item=>{
-        return map[item.status]
-    }).map(item=>{
-        return { ...item, color: map[item.status]};
-    })
+    return Array.isArray(values) && values.reduce((result, item)=>{
+        if(map[item.status]) {
+            result.push({ ...item, color: map[item.status]});
+        }
+        return result;
+    }, [])
 };
 exports.createGreeting = (greet, greeting) => {
     return (name) => {
